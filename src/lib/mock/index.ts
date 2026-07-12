@@ -4,6 +4,7 @@ export * from "./opportunities";
 export * from "./quotes";
 export * from "./production";
 export * from "./checklist";
+export * from "./weekly-schedule";
 export * from "./suppliers";
 export * from "./tasks";
 export * from "./integrations";

@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ProductionPriorityBadge } from "@/components/shared/status-badges";
+import { WeeklyBreakdown } from "@/components/production/weekly-breakdown";
 import { productionStaff } from "@/lib/mock/production";
 import { checklistItems as initialItems, checklistBoards } from "@/lib/mock/checklist";
 import {
@@ -83,83 +84,92 @@ export function EmployeeChecklist() {
           ];
 
           return (
-            <Card key={staff} className="relative overflow-hidden">
-              {allDone[staff] ? (
-                <div className="absolute inset-x-0 top-0 z-10 animate-in fade-in slide-in-from-top-2 bg-mint px-4 py-2.5 text-center text-sm font-semibold text-mint-foreground">
-                  {allDone[staff]}
-                </div>
-              ) : null}
-              <CardHeader className="gap-3 space-y-0 pb-3">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="text-sm">{initials(staff)}</AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0">
-                    <p className="text-lg font-semibold leading-tight text-foreground">{staff}</p>
-                    <p className="truncate text-xs text-muted-foreground">Today: {board.jobName}</p>
+            <div key={staff} className="flex flex-col gap-4">
+              <Card className="relative overflow-hidden">
+                {allDone[staff] ? (
+                  <div className="absolute inset-x-0 top-0 z-10 animate-in fade-in slide-in-from-top-2 bg-mint px-4 py-2.5 text-center text-sm font-semibold text-mint-foreground">
+                    {allDone[staff]}
                   </div>
-                </div>
+                ) : null}
+                <CardHeader className="gap-3 space-y-0 pb-3">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="text-sm">{initials(staff)}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <p className="text-lg font-semibold leading-tight text-foreground">{staff}</p>
+                      <p className="truncate text-xs text-muted-foreground">Today: {board.jobName}</p>
+                    </div>
+                  </div>
 
-                <div>
-                  <div className="mb-1.5 flex items-center justify-between text-sm">
-                    <span className="font-medium text-foreground">
-                      {completedCount} of {staffItems.length} tasks complete
+                  <div>
+                    <div className="mb-1.5 flex items-center justify-between text-sm">
+                      <span className="font-medium text-foreground">
+                        {completedCount} of {staffItems.length} tasks complete
+                      </span>
+                      <span className="text-xs text-muted-foreground">{remaining} remaining</span>
+                    </div>
+                    <Progress value={progress} className="h-2.5 transition-all" />
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Layers className="h-3.5 w-3.5" />
+                      Batch {board.batchCode}
                     </span>
-                    <span className="text-xs text-muted-foreground">{remaining} remaining</span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" />
+                      Est. finish {board.estimatedFinishTime}
+                    </span>
+                    <ProductionPriorityBadge priority={board.priority} />
                   </div>
-                  <Progress value={progress} className="h-2.5 transition-all" />
-                </div>
+                </CardHeader>
+                <CardContent className="space-y-1 pt-0">
+                  {orderedItems.map((item) => (
+                    <div key={item.id} className="relative">
+                      {celebrations[item.id] ? (
+                        <span className="pointer-events-none absolute -top-1 right-2 z-10 animate-in fade-in slide-in-from-bottom-1 rounded-full bg-card px-2 py-0.5 text-xs font-medium text-primary shadow-popover">
+                          {celebrations[item.id]}
+                        </span>
+                      ) : null}
+                      <button
+                        onClick={(event) => toggleItem(item.id, staff, event)}
+                        className={cn(
+                          "flex w-full items-center gap-3 rounded-lg px-2 py-3 text-left transition-all duration-200",
+                          item.completed ? "opacity-60" : "hover:bg-accent/60"
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-200",
+                            item.completed
+                              ? "scale-105 border-mint bg-mint text-mint-foreground"
+                              : "border-border text-transparent"
+                          )}
+                        >
+                          <Check className="h-4 w-4" strokeWidth={3} />
+                        </span>
+                        <span
+                          className={cn(
+                            "text-base leading-snug transition-colors duration-200",
+                            item.completed ? "text-muted-foreground line-through" : "text-foreground"
+                          )}
+                        >
+                          {item.label}
+                        </span>
+                      </button>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
 
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <Layers className="h-3.5 w-3.5" />
-                    Batch {board.batchCode}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5" />
-                    Est. finish {board.estimatedFinishTime}
-                  </span>
-                  <ProductionPriorityBadge priority={board.priority} />
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-1 pt-0">
-                {orderedItems.map((item) => (
-                  <div key={item.id} className="relative">
-                    {celebrations[item.id] ? (
-                      <span className="pointer-events-none absolute -top-1 right-2 z-10 animate-in fade-in slide-in-from-bottom-1 rounded-full bg-card px-2 py-0.5 text-xs font-medium text-primary shadow-popover">
-                        {celebrations[item.id]}
-                      </span>
-                    ) : null}
-                    <button
-                      onClick={(event) => toggleItem(item.id, staff, event)}
-                      className={cn(
-                        "flex w-full items-center gap-3 rounded-lg px-2 py-3 text-left transition-all duration-200",
-                        item.completed ? "opacity-60" : "hover:bg-accent/60"
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          "flex h-7 w-7 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-200",
-                          item.completed
-                            ? "scale-105 border-mint bg-mint text-mint-foreground"
-                            : "border-border text-transparent"
-                        )}
-                      >
-                        <Check className="h-4 w-4" strokeWidth={3} />
-                      </span>
-                      <span
-                        className={cn(
-                          "text-base leading-snug transition-colors duration-200",
-                          item.completed ? "text-muted-foreground line-through" : "text-foreground"
-                        )}
-                      >
-                        {item.label}
-                      </span>
-                    </button>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+              <WeeklyBreakdown
+                staff={staff}
+                todayJobName={board.jobName}
+                todayCompleted={completedCount}
+                todayTotal={staffItems.length}
+              />
+            </div>
           );
         })}
       </div>
