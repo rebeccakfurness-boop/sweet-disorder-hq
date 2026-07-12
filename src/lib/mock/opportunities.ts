@@ -19,7 +19,7 @@ export const opportunities: Opportunity[] = [
     stage: "new",
     estimatedValue: 650,
     nextFollowUpDate: "2026-07-14",
-    ownerName: "Ana",
+    ownerName: "Molly",
     createdAt: "2026-07-06T15:30:00+12:00",
   },
   {
@@ -40,7 +40,7 @@ export const opportunities: Opportunity[] = [
     stage: "contacted",
     estimatedValue: 2100,
     nextFollowUpDate: "2026-07-16",
-    ownerName: "Ana",
+    ownerName: "Molly",
     createdAt: "2026-07-08T14:05:00+12:00",
   },
   {
@@ -50,7 +50,7 @@ export const opportunities: Opportunity[] = [
     stage: "contacted",
     estimatedValue: 480,
     nextFollowUpDate: "2026-07-20",
-    ownerName: "Ana",
+    ownerName: "Molly",
     createdAt: "2026-07-11T13:50:00+12:00",
   },
   {
@@ -81,7 +81,7 @@ export const opportunities: Opportunity[] = [
     stage: "quoted",
     estimatedValue: 920,
     nextFollowUpDate: "2026-07-19",
-    ownerName: "Ana",
+    ownerName: "Molly",
     createdAt: "2026-07-05T10:00:00+12:00",
   },
   {
@@ -112,7 +112,7 @@ export const opportunities: Opportunity[] = [
     stage: "won",
     estimatedValue: 610,
     nextFollowUpDate: null,
-    ownerName: "Ana",
+    ownerName: "Molly",
     createdAt: "2026-06-02T13:50:00+12:00",
   },
   // Lost
@@ -123,7 +123,7 @@ export const opportunities: Opportunity[] = [
     stage: "lost",
     estimatedValue: 1300,
     nextFollowUpDate: null,
-    ownerName: "Ana",
+    ownerName: "Molly",
     createdAt: "2026-06-25T14:05:00+12:00",
   },
 ];

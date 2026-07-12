@@ -121,7 +121,6 @@ export function NewOpportunityDialog({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Molly">Molly</SelectItem>
-                <SelectItem value="Ana">Ana</SelectItem>
               </SelectContent>
             </Select>
           </div>

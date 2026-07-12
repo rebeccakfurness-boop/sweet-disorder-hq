@@ -12,7 +12,7 @@ export const tasks: StaffTask[] = [
   {
     id: "task-2",
     title: "Call Great Southern Wholesale about new range pricing",
-    assignedTo: "Ana",
+    assignedTo: "Molly",
     companyId: "co-great-southern",
     dueDate: "2026-07-12",
     completed: false,
