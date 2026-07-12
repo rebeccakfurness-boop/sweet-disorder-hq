@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ProductionStatusBadge } from "@/components/shared/status-badges";
 import { AssignmentsTable } from "@/components/production/assignments-table";
-import { WeeklyWorkload } from "@/components/production/weekly-workload";
+import { EmployeeChecklist } from "@/components/production/employee-checklist";
 import { productionJobs } from "@/lib/mock/production";
 import { formatDate } from "@/lib/utils";
 
@@ -44,7 +44,7 @@ export default function ProductionPage() {
       </div>
 
       <AssignmentsTable />
-      <WeeklyWorkload />
+      <EmployeeChecklist />
     </div>
   );
 }

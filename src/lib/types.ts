@@ -89,15 +89,6 @@ export interface ProductionJob {
   bestBeforeDate: string;
 }
 
-export type Weekday = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday";
-
-export interface ScheduleEntry {
-  id: string;
-  staff: ProductionStaffMember;
-  day: Weekday;
-  label: string;
-  productionJobId?: string;
-}
 
 export type SupplierCompliance = "compliant" | "needs_update";
 
