@@ -1,5 +1,6 @@
 import {
   LayoutDashboard,
+  Briefcase,
   Building2,
   KanbanSquare,
   FileText,
@@ -19,6 +20,7 @@ export interface NavItem {
 
 export const navItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Business Operations", href: "/business-operations", icon: Briefcase },
   { label: "Corporate CRM", href: "/crm", icon: Building2 },
   { label: "Opportunities", href: "/opportunities", icon: KanbanSquare },
   { label: "Quotes", href: "/quotes", icon: FileText },

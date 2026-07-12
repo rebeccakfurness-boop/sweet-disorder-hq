@@ -1,34 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useDraggable } from "@dnd-kit/core";
 import { CalendarClock, ChevronRight } from "lucide-react";
 
 import type { Opportunity } from "@/lib/types";
 import { getCompanyById } from "@/lib/mock/companies";
-import { cn, formatCurrencyNZD, formatDateShort } from "@/lib/utils";
+import { DndCard } from "@/components/shared/kanban";
+import { formatCurrencyNZD, formatDateShort } from "@/lib/utils";
 
 export function OpportunityCard({ opportunity }: { opportunity: Opportunity }) {
   const company = getCompanyById(opportunity.companyId);
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: opportunity.id,
-  });
-
-  const style = transform
-    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
-    : undefined;
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className={cn(
-        "group relative cursor-grab rounded-lg border border-border bg-card p-3 shadow-card transition-shadow hover:shadow-popover active:cursor-grabbing",
-        isDragging && "z-10 opacity-60"
-      )}
-    >
+    <DndCard id={opportunity.id} className="group">
       <Link
         href={`/opportunities/${opportunity.id}`}
         onPointerDown={(e) => e.stopPropagation()}
@@ -49,6 +33,6 @@ export function OpportunityCard({ opportunity }: { opportunity: Opportunity }) {
           </span>
         ) : null}
       </div>
-    </div>
+    </DndCard>
   );
 }

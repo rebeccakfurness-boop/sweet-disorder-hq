@@ -11,6 +11,7 @@ import type {
   ProductionStatus,
   ProductionPriority,
   SupplierCompliance,
+  OpsTaskTag,
 } from "@/lib/types";
 
 export function CompanyTypeBadge({ type }: { type: CompanyType }) {
@@ -50,4 +51,16 @@ export function SupplierComplianceBadge({ status }: { status: SupplierCompliance
 export function ProductionPriorityBadge({ priority }: { priority: ProductionPriority }) {
   const variant = priority === "high" ? "destructive" : priority === "medium" ? "mustard" : "muted";
   return <Badge variant={variant}>{productionPriorityLabels[priority]}</Badge>;
+}
+
+const opsTagVariants: Record<OpsTaskTag, "secondary" | "default" | "destructive" | "mustard" | "outline"> = {
+  Systems: "secondary",
+  Marketing: "default",
+  Compliance: "destructive",
+  Wholesale: "mustard",
+  Admin: "outline",
+};
+
+export function OpsTagBadge({ tag }: { tag: OpsTaskTag }) {
+  return <Badge variant={opsTagVariants[tag]}>{tag}</Badge>;
 }

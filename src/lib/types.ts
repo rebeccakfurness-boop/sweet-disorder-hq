@@ -121,3 +121,17 @@ export interface Integration {
   status: IntegrationStatus;
   capabilities: string[];
 }
+
+// Molly's own cross-business task board (Business Operations) — distinct
+// from production/CRM tasks, grouped by time horizon rather than status.
+export type OpsTaskHorizon = "today" | "this_week" | "coming_up" | "someday";
+export type OpsTaskTag = "Systems" | "Marketing" | "Compliance" | "Wholesale" | "Admin";
+
+export interface OpsTask {
+  id: string;
+  title: string;
+  tag?: OpsTaskTag;
+  dueDate?: string | null;
+  horizon: OpsTaskHorizon;
+  completed: boolean;
+}

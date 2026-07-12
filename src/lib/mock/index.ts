@@ -5,6 +5,7 @@ export * from "./quotes";
 export * from "./production";
 export * from "./checklist";
 export * from "./weekly-schedule";
+export * from "./ops-tasks";
 export * from "./suppliers";
 export * from "./tasks";
 export * from "./integrations";

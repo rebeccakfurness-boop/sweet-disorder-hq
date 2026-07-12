@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { DndContext, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
+import type { DragEndEvent } from "@dnd-kit/core";
 
+import { DndBoard } from "@/components/shared/kanban";
 import { KanbanColumn } from "@/components/opportunities/kanban-column";
 import { NewOpportunityDialog } from "@/components/opportunities/new-opportunity-dialog";
 import { PageHeader } from "@/components/shared/page-header";
@@ -11,7 +12,6 @@ import type { Opportunity, OpportunityStage } from "@/lib/types";
 
 export function KanbanBoard({ defaultCompanyId }: { defaultCompanyId?: string }) {
   const [opportunities, setOpportunities] = useState<Opportunity[]>(initialOpportunities);
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -36,18 +36,16 @@ export function KanbanBoard({ defaultCompanyId }: { defaultCompanyId?: string })
         }
       />
 
-      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-        <div className="flex gap-4 overflow-x-auto pb-4">
-          {stageOrder.map((stage) => (
-            <KanbanColumn
-              key={stage}
-              stage={stage}
-              label={stageLabels[stage]}
-              opportunities={opportunities.filter((o) => o.stage === stage)}
-            />
-          ))}
-        </div>
-      </DndContext>
+      <DndBoard onDragEnd={handleDragEnd}>
+        {stageOrder.map((stage) => (
+          <KanbanColumn
+            key={stage}
+            stage={stage}
+            label={stageLabels[stage]}
+            opportunities={opportunities.filter((o) => o.stage === stage)}
+          />
+        ))}
+      </DndBoard>
     </div>
   );
 }
