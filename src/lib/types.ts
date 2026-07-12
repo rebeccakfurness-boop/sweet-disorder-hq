@@ -67,16 +67,36 @@ export interface Quote {
 }
 
 export type ProductionStatus = "not_started" | "in_progress" | "qc_check" | "ready_to_dispatch";
+export type ProductionPriority = "low" | "medium" | "high";
+
+// Production staff are a fixed roster for now; swap for a `staff` table + FK
+// once this is backed by a real database.
+export type ProductionStaffMember = "Ange" | "Charlie";
 
 export interface ProductionJob {
   id: string;
   opportunityId: string | null;
   companyName: string;
+  jobName: string;
   productName: string;
   quantity: number;
   status: ProductionStatus;
+  priority: ProductionPriority;
+  assignedTo: ProductionStaffMember;
+  estimatedDurationHours: number;
+  dueDate: string;
   batchCode: string;
   bestBeforeDate: string;
+}
+
+export type Weekday = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday";
+
+export interface ScheduleEntry {
+  id: string;
+  staff: ProductionStaffMember;
+  day: Weekday;
+  label: string;
+  productionJobId?: string;
 }
 
 export type SupplierCompliance = "compliant" | "needs_update";
@@ -94,6 +114,7 @@ export interface Supplier {
 export interface StaffTask {
   id: string;
   title: string;
+  assignedTo: string;
   companyId: string | null;
   dueDate: string;
   completed: boolean;

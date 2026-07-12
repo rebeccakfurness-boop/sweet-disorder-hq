@@ -21,9 +21,8 @@ export function QuotePreview({ data }: { data: QuotePreviewData }) {
     <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-card p-10 shadow-popover print:rounded-none print:border-none print:p-0 print:shadow-none">
       <div className="flex items-start justify-between border-b border-dashed border-border pb-6">
         <div className="flex items-center gap-3">
-          <LogoMark className="h-12 w-12 bg-primary/10" />
+          <LogoMark size={56} />
           <div>
-            <p className="font-display text-lg font-semibold text-foreground">Sweet Disorder</p>
             <p className="text-xs text-muted-foreground">Prescribing fun gifts for everyone</p>
             <p className="mt-1 text-xs text-muted-foreground">Silverdale, Auckland · sweetdisorder.co.nz</p>
           </div>
@@ -47,7 +46,7 @@ export function QuotePreview({ data }: { data: QuotePreviewData }) {
         </div>
         <div className="text-right">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Prescribed by</p>
-          <p className="mt-1 text-sm font-medium text-foreground">Molly Tepania</p>
+          <p className="mt-1 text-sm font-medium text-foreground">Molly Hansen</p>
           <p className="text-sm text-muted-foreground">Chief Dream Officer, Sweet Disorder</p>
         </div>
       </div>

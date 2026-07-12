@@ -2,13 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { companyTypeLabels } from "@/lib/mock/companies";
 import { stageLabels } from "@/lib/mock/opportunities";
 import { quoteStatusLabels } from "@/lib/mock/quotes";
-import { productionStatusLabels } from "@/lib/mock/production";
+import { productionStatusLabels, productionPriorityLabels } from "@/lib/mock/production";
 import { supplierComplianceLabels } from "@/lib/mock/suppliers";
 import type {
   CompanyType,
   OpportunityStage,
   QuoteStatus,
   ProductionStatus,
+  ProductionPriority,
   SupplierCompliance,
 } from "@/lib/types";
 
@@ -44,4 +45,9 @@ export function ProductionStatusBadge({ status }: { status: ProductionStatus }) 
 export function SupplierComplianceBadge({ status }: { status: SupplierCompliance }) {
   const variant = status === "compliant" ? "mint" : "destructive";
   return <Badge variant={variant}>{supplierComplianceLabels[status]}</Badge>;
+}
+
+export function ProductionPriorityBadge({ priority }: { priority: ProductionPriority }) {
+  const variant = priority === "high" ? "destructive" : priority === "medium" ? "mustard" : "muted";
+  return <Badge variant={variant}>{productionPriorityLabels[priority]}</Badge>;
 }

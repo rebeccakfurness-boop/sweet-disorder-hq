@@ -3,6 +3,7 @@ export * from "./companies";
 export * from "./opportunities";
 export * from "./quotes";
 export * from "./production";
+export * from "./schedule";
 export * from "./suppliers";
 export * from "./tasks";
 export * from "./integrations";

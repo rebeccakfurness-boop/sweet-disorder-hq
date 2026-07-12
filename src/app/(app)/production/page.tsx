@@ -1,12 +1,14 @@
 import { PageHeader } from "@/components/shared/page-header";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ProductionStatusBadge } from "@/components/shared/status-badges";
+import { AssignmentsTable } from "@/components/production/assignments-table";
+import { WeeklyWorkload } from "@/components/production/weekly-workload";
 import { productionJobs } from "@/lib/mock/production";
 import { formatDate } from "@/lib/utils";
 
 export default function ProductionPage() {
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader
         title="Production"
         description="Won opportunities as they move through the workshop, from jars to dispatch."
@@ -40,6 +42,9 @@ export default function ProductionPage() {
           </TableBody>
         </Table>
       </div>
+
+      <AssignmentsTable />
+      <WeeklyWorkload />
     </div>
   );
 }

@@ -1,38 +1,31 @@
+import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 
-function CapsuleMark({ className }: { className?: string }) {
+export function LogoMark({
+  className,
+  size = 40,
+}: {
+  className?: string;
+  size?: number;
+}) {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <g transform="rotate(-45 16 16)">
-        <rect x="6" y="11" width="20" height="10" rx="5" fill="currentColor" className="text-primary" />
-        <path
-          d="M11 11H21C23.7614 11 26 13.2386 26 16C26 18.7614 23.7614 21 21 21H11V11Z"
-          fill="currentColor"
-          className="text-mustard"
-        />
-        <rect x="6" y="11" width="20" height="10" rx="5" stroke="currentColor" strokeWidth="1" className="text-foreground/10" fill="none" />
-        <line x1="16" y1="11" x2="16" y2="21" stroke="currentColor" strokeWidth="1" className="text-foreground/10" />
-      </g>
-    </svg>
-  );
-}
-
-export function LogoMark({ className }: { className?: string }) {
-  return (
-    <div
+    <span
       className={cn(
-        "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-foreground/5",
+        "relative inline-block shrink-0 overflow-hidden rounded-full bg-card ring-1 ring-black/5",
         className
       )}
+      style={{ width: size, height: size }}
     >
-      <CapsuleMark className="h-5 w-5" />
-    </div>
+      <Image
+        src="/brand/sweet-disorder-logo.png"
+        alt="Sweet Disorder"
+        fill
+        sizes={`${size}px`}
+        className="object-cover"
+        priority
+      />
+    </span>
   );
 }
 
@@ -40,34 +33,34 @@ export function Logo({
   className,
   subline = "Project HQ",
   tone = "light",
+  size = 40,
+  stacked = false,
 }: {
   className?: string;
   subline?: string | null;
   tone?: "light" | "dark";
+  size?: number;
+  stacked?: boolean;
 }) {
   return (
-    <div className={cn("flex items-center gap-2.5", className)}>
-      <LogoMark />
-      <div className="flex flex-col leading-none">
+    <div
+      className={cn(
+        "flex items-center gap-2.5",
+        stacked && "flex-col gap-3 text-center",
+        className
+      )}
+    >
+      <LogoMark size={size} />
+      {subline ? (
         <span
           className={cn(
-            "font-display text-[15px] font-semibold tracking-tight",
-            tone === "dark" ? "text-sidebar-foreground" : "text-foreground"
+            "text-[11px] font-medium uppercase tracking-wider",
+            tone === "dark" ? "text-sidebar-foreground/60" : "text-muted-foreground"
           )}
         >
-          Sweet Disorder
+          {subline}
         </span>
-        {subline ? (
-          <span
-            className={cn(
-              "text-[11px] font-medium uppercase tracking-wider",
-              tone === "dark" ? "text-sidebar-foreground/50" : "text-muted-foreground"
-            )}
-          >
-            {subline}
-          </span>
-        ) : null}
-      </div>
+      ) : null}
     </div>
   );
 }

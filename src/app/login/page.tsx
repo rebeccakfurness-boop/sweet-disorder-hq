@@ -24,7 +24,7 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-sm">
         <div className="mb-8 flex justify-center">
-          <Logo />
+          <Logo size={72} stacked />
         </div>
 
         <div className="rounded-2xl border border-border bg-card p-8 shadow-popover">
