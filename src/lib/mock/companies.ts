@@ -167,6 +167,27 @@ export function getCompanyById(id: string) {
   return companies.find((company) => company.id === id);
 }
 
+// Mutates the shared mock arrays so a company created mid-session (e.g. from
+// the "Add Opportunity" flow) is immediately resolvable everywhere else that
+// reads from `companies`/`contacts` in this browser session — same
+// mock-data-as-poor-man's-DB approach as the rest of the app, just extended
+// to writes. Swap for a real INSERT once this is backed by Postgres.
+export function addCompany(company: Company, primaryContactName?: string): Company {
+  companies.push(company);
+  if (primaryContactName?.trim()) {
+    contacts.push({
+      id: `ct-${company.id}-primary`,
+      companyId: company.id,
+      name: primaryContactName.trim(),
+      title: "Primary Contact",
+      email: "",
+      phone: "",
+      isPrimary: true,
+    });
+  }
+  return company;
+}
+
 export function getContactsByCompanyId(companyId: string) {
   return contacts.filter((contact) => contact.companyId === companyId);
 }

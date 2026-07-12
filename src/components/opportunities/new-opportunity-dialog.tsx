@@ -16,8 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CompanyCombobox } from "@/components/opportunities/company-combobox";
 import { companies } from "@/lib/mock/companies";
-import type { Opportunity } from "@/lib/types";
+import type { Company, Opportunity } from "@/lib/types";
 
 export function NewOpportunityDialog({
   defaultCompanyId,
@@ -27,6 +28,7 @@ export function NewOpportunityDialog({
   onCreate: (opportunity: Opportunity) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [companyList, setCompanyList] = useState<Company[]>(companies);
   const [companyId, setCompanyId] = useState(defaultCompanyId ?? companies[0]?.id);
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
@@ -68,18 +70,12 @@ export function NewOpportunityDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="opp-company">Company</Label>
-            <Select value={companyId} onValueChange={setCompanyId}>
-              <SelectTrigger id="opp-company">
-                <SelectValue placeholder="Select a company" />
-              </SelectTrigger>
-              <SelectContent>
-                {companies.map((company) => (
-                  <SelectItem key={company.id} value={company.id}>
-                    {company.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <CompanyCombobox
+              companies={companyList}
+              value={companyId}
+              onChange={setCompanyId}
+              onCompanyCreated={(company) => setCompanyList((prev) => [...prev, company])}
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="opp-title">Opportunity title</Label>
