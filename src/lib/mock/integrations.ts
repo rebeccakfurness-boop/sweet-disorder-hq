@@ -45,12 +45,12 @@ export const integrations: Integration[] = [
     name: "Google Drive",
     category: "Documents",
     description:
-      "Attach and auto-file signed quotes, wholesale agreements, and supplier compliance certificates against the right company or supplier record.",
+      "Power the Knowledge Hub straight from your existing Drive folder — SOPs, policies, and training docs, with no re-uploading.",
     status: "not_connected",
     capabilities: [
+      "Sync a chosen Drive folder into the Knowledge Hub, kept up to date automatically",
       "Auto-file generated quotes into a shared Drive folder",
       "Attach supplier compliance docs directly to their record",
-      "Search Drive files from inside a company or supplier page",
     ],
   },
   {

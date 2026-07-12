@@ -6,6 +6,7 @@ import {
   Factory,
   Truck,
   Plug,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react";
 
@@ -23,5 +24,6 @@ export const navItems: NavItem[] = [
   { label: "Quotes", href: "/quotes", icon: FileText },
   { label: "Production", href: "/production", icon: Factory },
   { label: "Suppliers", href: "/suppliers", icon: Truck },
+  { label: "Knowledge Hub", href: "/knowledge", icon: BookOpen },
   { label: "Integrations", href: "/settings/integrations", icon: Plug },
 ];
