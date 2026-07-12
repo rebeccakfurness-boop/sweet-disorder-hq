@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 38 42% 96%;
+    --foreground: 20 18% 15%;
+
+    --card: 40 46% 98%;
+    --card-foreground: 20 18% 15%;
+
+    --popover: 40 46% 99%;
+    --popover-foreground: 20 18% 15%;
+
+    --primary: 350 72% 52%;
+    --primary-foreground: 40 46% 98%;
+
+    --secondary: 165 40% 94%;
+    --secondary-foreground: 165 45% 20%;
+
+    --muted: 38 26% 92%;
+    --muted-foreground: 25 12% 42%;
+
+    --accent: 38 32% 90%;
+    --accent-foreground: 20 18% 15%;
+
+    --destructive: 5 72% 50%;
+    --destructive-foreground: 40 46% 98%;
+
+    --border: 35 22% 87%;
+    --input: 35 22% 85%;
+    --ring: 350 72% 52%;
+
+    --mint: 165 45% 40%;
+    --mint-foreground: 40 46% 98%;
+
+    --mustard: 40 88% 54%;
+    --mustard-foreground: 25 35% 16%;
+
+    --sidebar: 22 26% 11%;
+    --sidebar-foreground: 36 28% 92%;
+    --sidebar-accent: 350 55% 22%;
+    --sidebar-border: 22 20% 19%;
+
+    --radius: 0.625rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .prescription-label {
+    background-image: repeating-linear-gradient(
+      135deg,
+      hsl(var(--border)) 0px,
+      hsl(var(--border)) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+  }
+}
