@@ -10,6 +10,7 @@ import {
   Camera,
   Plug,
   BookOpen,
+  GraduationCap,
   type LucideIcon,
 } from "lucide-react";
 
@@ -31,5 +32,6 @@ export const navItems: NavItem[] = [
   { label: "Suppliers", href: "/suppliers", icon: Truck },
   { label: "Supplier Records", href: "/supplier-records", icon: Package },
   { label: "Knowledge Hub", href: "/knowledge", icon: BookOpen },
+  { label: "Staff Training", href: "/training", icon: GraduationCap },
   { label: "Integrations", href: "/settings/integrations", icon: Plug },
 ];

@@ -5,3 +5,4 @@ export * from "./supplier-records";
 export * from "./sync";
 export * from "./auth";
 export * from "./wholesale-orders";
+export * from "./training";
