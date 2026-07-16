@@ -114,7 +114,10 @@ export function WholesaleOrderUploadForm() {
             accept="image/*"
             capture="environment"
             onChange={handlePhotoChange}
-            className="hidden"
+            // `hidden`/`display:none` inputs can't be opened via a synthetic
+            // .click() in Safari/iOS — sr-only keeps it in the layout (so the
+            // native picker still trusts the click) while staying invisible.
+            className="sr-only"
           />
 
           <div className="flex flex-wrap items-center gap-3">
