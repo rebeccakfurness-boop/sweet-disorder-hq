@@ -1,31 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Camera, Loader2, CheckCircle2, AlertTriangle, Info, X } from "lucide-react";
+import { Camera, Loader2, AlertTriangle, Info, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { WholesaleOrderExtraction, WholesaleOrderRegion } from "@/lib/wholesale-orders/types";
-import { cn } from "@/lib/utils";
+import { OrderReview } from "@/components/wholesale-orders/order-review";
+import type { WholesaleOrderRecord, WholesaleOrderRegion } from "@/lib/wholesale-orders/types";
 
 type ReadStatus = "idle" | "reading" | "done" | "error";
-
-function formatMoney(amount: number, region: WholesaleOrderRegion): string {
-  return new Intl.NumberFormat(region === "NZ" ? "en-NZ" : "en-AU", {
-    style: "currency",
-    currency: region === "NZ" ? "NZD" : "AUD",
-  }).format(amount);
-}
 
 export function WholesaleOrderUploadForm() {
   const [region, setRegion] = useState<WholesaleOrderRegion | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
   const [status, setStatus] = useState<ReadStatus>("idle");
-  const [extraction, setExtraction] = useState<WholesaleOrderExtraction | null>(null);
-  const [configured, setConfigured] = useState(true);
+  const [order, setOrder] = useState<WholesaleOrderRecord | null>(null);
+  const [aiConfigured, setAiConfigured] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -37,7 +28,7 @@ export function WholesaleOrderUploadForm() {
 
   function resetResults() {
     setStatus("idle");
-    setExtraction(null);
+    setOrder(null);
     setError(null);
   }
 
@@ -81,9 +72,8 @@ export function WholesaleOrderUploadForm() {
         return;
       }
 
-      const { configured: isConfigured, ...rest } = data;
-      setConfigured(isConfigured !== false);
-      setExtraction(rest as WholesaleOrderExtraction);
+      setAiConfigured(Boolean(data.aiConfigured));
+      setOrder(data.order as WholesaleOrderRecord);
       setStatus("done");
     } catch {
       setError("Couldn't reach the server — check your connection and try again.");
@@ -92,7 +82,6 @@ export function WholesaleOrderUploadForm() {
   }
 
   const canRead = Boolean(region && photoFile) && status !== "reading";
-  const total = extraction?.lineItems.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0) ?? 0;
 
   return (
     <div className="space-y-6">
@@ -166,9 +155,9 @@ export function WholesaleOrderUploadForm() {
         </div>
       ) : null}
 
-      {status === "done" && extraction ? (
+      {status === "done" && order ? (
         <div className="space-y-4">
-          {!configured ? (
+          {!aiConfigured ? (
             <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
               <Info className="mt-0.5 h-4 w-4 shrink-0" />
               <p>
@@ -178,90 +167,9 @@ export function WholesaleOrderUploadForm() {
             </div>
           ) : null}
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Store Details</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-              <DetailField label="Store Name" value={extraction.storeName} />
-              <DetailField label="Contact Person" value={extraction.contactPerson} />
-              <DetailField label="Email" value={extraction.contactEmail} />
-              <DetailField label="Phone" value={extraction.contactPhone} />
-              <DetailField label="Address" value={extraction.address} />
-              <DetailField label="Order Required Date" value={extraction.orderRequiredDate} />
-              <div className="sm:col-span-2">
-                <DetailField label="Additional Notes" value={extraction.additionalNotes} />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
-                <CheckCircle2 className="h-4 w-4 text-mint" />
-                Extracted Order Lines
-                <Badge variant="muted">{extraction.lineItems.length}</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Item Code</TableHead>
-                    <TableHead>Product</TableHead>
-                    <TableHead>Variant</TableHead>
-                    <TableHead>Qty</TableHead>
-                    <TableHead>Unit Price</TableHead>
-                    <TableHead>Line Total</TableHead>
-                    <TableHead>Confidence</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {extraction.lineItems.map((line, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="text-sm text-muted-foreground">{line.itemCode ?? "—"}</TableCell>
-                      <TableCell>
-                        <div className="text-sm font-medium text-foreground">{line.productDescription}</div>
-                        {line.confidence === "low" && line.rawText ? (
-                          <div className="mt-0.5 flex items-start gap-1 text-xs text-mustard-foreground">
-                            <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
-                            <span>Flagged for review — read as &ldquo;{line.rawText}&rdquo;</span>
-                          </div>
-                        ) : null}
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{line.variant}</TableCell>
-                      <TableCell className="text-sm text-foreground">{line.quantity}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {formatMoney(line.unitPrice, region!)}
-                      </TableCell>
-                      <TableCell className="text-sm text-foreground">
-                        {formatMoney(line.quantity * line.unitPrice, region!)}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={line.confidence === "high" ? "mint" : "mustard"}>
-                          {line.confidence === "high" ? "High" : "Needs review"}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <div className={cn("flex justify-end border-t border-border px-4 py-3 text-sm font-medium text-foreground")}>
-                Total: {formatMoney(total, region!)}
-              </div>
-            </CardContent>
-          </Card>
+          <OrderReview key={order.id ?? order.createdAt} order={order} />
         </div>
       ) : null}
-    </div>
-  );
-}
-
-function DetailField({ label, value }: { label: string; value: string | null }) {
-  return (
-    <div>
-      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
-      <div className="text-sm text-foreground">{value ?? "—"}</div>
     </div>
   );
 }
