@@ -54,6 +54,19 @@ export const integrations: Integration[] = [
     ],
   },
   {
+    id: "google-sheets",
+    name: "Google Sheets",
+    category: "Documents",
+    description:
+      "Power Supplier Records straight from the shared Sweet Disorder supplier spreadsheet — items, suppliers, and cost prices, always current.",
+    status: "not_connected",
+    capabilities: [
+      "Sync the Items and Suppliers tabs into Project HQ automatically",
+      "Reflect new rows and edits on the next sync — no manual re-entry",
+      "Keep cost-price data private behind the same Google sign-in as Drive",
+    ],
+  },
+  {
     id: "oki-printer",
     name: "OKI Printer & Label System",
     category: "Production",

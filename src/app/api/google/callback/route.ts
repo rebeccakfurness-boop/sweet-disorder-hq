@@ -34,34 +34,39 @@ export async function GET(request: NextRequest) {
   const tokens = await exchangeCodeForTokens(code);
   const accountEmail = await getGoogleAccountEmail(tokens.accessToken).catch(() => undefined);
 
-  const [integration] = await db
-    .insert(integrations)
-    .values({ provider: "google_drive", status: "connected", accountEmail })
-    .onConflictDoUpdate({
-      target: integrations.provider,
-      set: { status: "connected", accountEmail, updatedAt: new Date() },
-    })
-    .returning();
+  // One consent screen grants both the Drive and Sheets scopes (see
+  // src/lib/google/config.ts), so this single token set powers both the
+  // Knowledge Hub and Supplier Records — write an integration row for each.
+  for (const provider of ["google_drive", "google_sheets"] as const) {
+    const [integration] = await db
+      .insert(integrations)
+      .values({ provider, status: "connected", accountEmail })
+      .onConflictDoUpdate({
+        target: integrations.provider,
+        set: { status: "connected", accountEmail, updatedAt: new Date() },
+      })
+      .returning();
 
-  await db
-    .insert(oauthTokens)
-    .values({
-      integrationId: integration.id,
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      tokenType: tokens.tokenType ?? "Bearer",
-      scope: tokens.scope,
-      expiresAt: tokens.expiresAt,
-    })
-    .onConflictDoUpdate({
-      target: oauthTokens.integrationId,
-      set: {
+    await db
+      .insert(oauthTokens)
+      .values({
+        integrationId: integration.id,
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
+        tokenType: tokens.tokenType ?? "Bearer",
+        scope: tokens.scope,
         expiresAt: tokens.expiresAt,
-        updatedAt: new Date(),
-      },
-    });
+      })
+      .onConflictDoUpdate({
+        target: oauthTokens.integrationId,
+        set: {
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+          expiresAt: tokens.expiresAt,
+          updatedAt: new Date(),
+        },
+      });
+  }
 
   const response = NextResponse.redirect(new URL("/settings/integrations?connected=google_drive", request.url));
   response.cookies.delete(STATE_COOKIE);

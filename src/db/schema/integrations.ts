@@ -7,6 +7,7 @@ import { relations } from "drizzle-orm";
 // — nothing else in this table changes.
 export const integrationProviderEnum = pgEnum("integration_provider", [
   "google_drive",
+  "google_sheets",
   "shopify",
   "xero",
   "hubspot",

@@ -7,9 +7,12 @@ export const googleConfig = {
   redirectUri: process.env.GOOGLE_REDIRECT_URI ?? "",
   // drive.readonly is enough to browse + read metadata/content; add
   // drive.metadata.readonly-only scopes here later if a tighter grant is
-  // preferred once real usage patterns are known.
+  // preferred once real usage patterns are known. spreadsheets.readonly
+  // powers Supplier Records (src/lib/google/sheets-client.ts) — same Google
+  // account, one extra scope, no separate OAuth flow.
   scopes: [
     "https://www.googleapis.com/auth/drive.readonly",
+    "https://www.googleapis.com/auth/spreadsheets.readonly",
     "https://www.googleapis.com/auth/userinfo.email",
   ],
 };
