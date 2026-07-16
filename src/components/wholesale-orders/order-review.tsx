@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, Info, Loader2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Info, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { burstCelebration } from "@/lib/confetti";
 import { cn } from "@/lib/utils";
 import type { WholesaleOrderLine, WholesaleOrderRecord, WholesaleOrderStatus } from "@/lib/wholesale-orders/types";
 
@@ -84,6 +85,7 @@ export function OrderReview({ order: initialOrder }: { order: WholesaleOrderReco
       const action = nextStatus === "approved" ? "Order approved" : "Changes kept";
       setSaveNote(`${action} — not saved to a database, so this only exists in this browser session.`);
       setSaving(false);
+      if (nextStatus === "approved") burstCelebration();
       return;
     }
 
@@ -100,6 +102,7 @@ export function OrderReview({ order: initialOrder }: { order: WholesaleOrderReco
       }
       setStatus(data.order.status);
       setSaveNote(nextStatus === "approved" ? "Order approved." : "Changes saved.");
+      if (nextStatus === "approved") burstCelebration();
     } catch {
       setSaveError("Couldn't reach the server — check your connection and try again.");
     } finally {
@@ -113,6 +116,13 @@ export function OrderReview({ order: initialOrder }: { order: WholesaleOrderReco
         <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
           <p>Not connected to a database yet — edits and approval exist only in this browser session.</p>
+        </div>
+      ) : null}
+
+      {status === "approved" ? (
+        <div className="flex items-center gap-2 rounded-lg border border-mint/30 bg-mint/10 px-4 py-3 text-sm font-medium text-mint">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <p>Order approved — ready to send to Xero.</p>
         </div>
       ) : null}
 
